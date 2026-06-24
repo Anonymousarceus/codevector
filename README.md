@@ -1,7 +1,3 @@
-Here is the updated README modified to reflect the complete full-stack application. It now includes the React frontend stack, updated installation/run instructions, and an expanded project structure, while preserving all the crucial backend performance notes you need for your interview.
-
----
-
 # 🚀 CodeVector Product Browser (Full-Stack)
 
 > A lightweight, high-performance full-stack application built with **React, Node.js, Express, and SQLite**. Designed to browse large product datasets efficiently using highly optimized **cursor-based pagination**.
