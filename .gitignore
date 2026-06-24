@@ -17,9 +17,12 @@ pids
 *.seed
 
 # Database
-*.db
 *.sqlite
 *.sqlite3
+*.db
+
+# Track application database
+!database/products.db
 
 # OS files
 .DS_Store
