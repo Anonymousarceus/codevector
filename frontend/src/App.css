@@ -1,0 +1,171 @@
+/* Base Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: #ffffff;
+  color: #333333;
+  line-height: 1.5;
+}
+
+/* Layout */
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* Header & Controls */
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: #6b7280;
+  font-size: 1.1rem;
+  margin-bottom: 24px;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+}
+
+.category-select {
+  padding: 10px 16px;
+  font-size: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background-color: #f9fafb;
+  color: #374151;
+  cursor: pointer;
+  outline: none;
+  min-width: 200px;
+  transition: border-color 0.2s;
+}
+
+.category-select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+/* Grid System */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+/* Product Card */
+.product-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.product-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 12px;
+}
+
+.divider {
+  border: 0;
+  height: 1px;
+  background: #f3f4f6;
+  margin-bottom: 16px;
+}
+
+.product-details {
+  font-size: 0.95rem;
+  color: #4b5563;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.product-details strong {
+  color: #111827;
+}
+
+.product-id {
+  margin-top: auto; /* Pushes ID to bottom if cards vary in height */
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+/* Load More Section */
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.load-more-btn {
+  background-color: #111827;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 32px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.load-more-btn:hover:not(:disabled) {
+  background-color: #374151;
+}
+
+.load-more-btn:disabled {
+  background-color: #d1d5db;
+  cursor: not-allowed;
+  color: #6b7280;
+}
+
+/* Status States */
+.loading-state, .error-state, .empty-state {
+  text-align: center;
+  padding: 40px;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.error-state {
+  background-color: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.empty-state {
+  color: #6b7280;
+  background-color: #f9fafb;
+  border: 1px dashed #d1d5db;
+}
