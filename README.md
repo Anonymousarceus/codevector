@@ -1,29 +1,42 @@
-# 🚀 CodeVector Backend
+Here is the updated README modified to reflect the complete full-stack application. It now includes the React frontend stack, updated installation/run instructions, and an expanded project structure, while preserving all the crucial backend performance notes you need for your interview.
 
-> A lightweight, high-performance REST API built with **Node.js, Express, and SQLite** for browsing large product datasets efficiently using **cursor-based pagination**.
+---
+
+# 🚀 CodeVector Product Browser (Full-Stack)
+
+> A lightweight, high-performance full-stack application built with **React, Node.js, Express, and SQLite**. Designed to browse large product datasets efficiently using highly optimized **cursor-based pagination**.
 
 ---
 
 ## ✨ Features
 
-* ⚡ **Cursor-Based Pagination** for fast and consistent performance on large datasets.
+**Frontend (React)**
+
+* 🖥️ **Responsive UI** with a clean, modern product grid (Pure CSS, no external UI libraries).
+* 🔄 **Seamless "Load More" Pagination** that appends products smoothly without page reloads.
+* 🎛️ **Category Filtering** with automatic state and cursor resets.
+* 🚦 **Robust State Handling** including loading indicators, empty states, and error catching.
+
+**Backend (Node.js & SQLite)**
+
+* ⚡ **Cursor-Based Pagination** for fast, O(1) offset performance on large datasets.
 * 🏎️ **Efficient Bulk Seeding** of 200,000 products using batched transactions.
-* 🗄️ **Optimized Database Queries** using composite indexes.
-* 🔍 **Category Filtering** support.
-* 🛡️ **SQL Injection Protection** using parameterized queries.
-* 📈 Designed to handle data changes while users browse without duplicates or missing products.
+* 🗄️ **Optimized Database Queries** using composite B-Tree indexes.
+* 🛡️ **SQL Injection Protection** using strict parameterized queries.
+* 📈 **Stable Browsing:** No duplicate or missing products if database records change during pagination.
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Technology     | Usage               |
-| -------------- | ------------------- |
-| Node.js        | Runtime Environment |
-| Express.js     | Backend Framework   |
-| SQLite         | Database            |
-| better-sqlite3 | SQLite Driver       |
-| Nodemon        | Development Server  |
+| Domain | Technology | Usage |
+| --- | --- | --- |
+| **Frontend** | React (Vite) | UI Library & Build Tool |
+|  | Axios | HTTP Client |
+|  | Plain CSS | Styling & Responsive Grid |
+| **Backend** | Node.js & Express.js | Runtime & REST API Framework |
+|  | SQLite (`better-sqlite3`) | Database & Driver |
+|  | Nodemon | Development Server |
 
 ---
 
@@ -36,69 +49,105 @@ Make sure you have the following installed:
 * Node.js (v18 or above)
 * npm
 
----
-
 ### Installation
 
 Clone the repository:
 
 ```bash
 git clone <your-repository-url>
-cd codevector-backend
+cd codevector
+
 ```
 
-Install dependencies:
+Since this is a full-stack project, you will need to install dependencies for both the backend and the frontend.
+
+**1. Setup Backend:**
 
 ```bash
+cd backend      # Or your backend root folder
 npm install
+
+```
+
+**2. Setup Frontend:**
+
+```bash
+cd frontend     # Or your frontend root folder
+npm install
+
 ```
 
 ---
 
 ## 🗄️ Database Initialization
 
-Generate and seed the database with 200,000 products:
+Navigate to your backend directory and generate the 200,000 mock products:
 
 ```bash
 npm run seed
+
 ```
 
-The seed script:
+*The seed script uses prepared statements and batched transactions to insert records in seconds.*
 
-* Generates 200,000 products.
-* Inserts records in batches of 5000.
-* Uses transactions for improved performance.
-
----
-
-### Optional Testing Script
-
-Insert 50 new products to test pagination consistency:
+**(Optional)** Insert 50 new products to test pagination consistency while browsing:
 
 ```bash
 npm run insert:new
+
 ```
 
 ---
 
 ## ▶️ Running the Application
 
-### Development Mode
+You will need two terminal windows to run both the frontend and backend simultaneously.
+
+### 1. Start the Backend API
 
 ```bash
+cd backend
 npm run dev
+
 ```
 
-### Production Mode
+*The backend server runs on `http://localhost:5000`.*
+
+### 2. Start the React Frontend
 
 ```bash
-npm start
+cd frontend
+npm run dev
+
 ```
 
-Server runs by default on:
+*The frontend development server typically runs on `http://localhost:5173`.*
+
+---
+
+## 🏗️ Project Structure
 
 ```text
-http://localhost:5000
+codevector/
+│
+├── database/
+│   │   ├── db.js             # SQLite connection & schema
+│   │   └── products.db       # Generated SQLite database
+│   ├── routes/
+│   │   └── products.js       # Cursor pagination API logic
+│   ├── scripts/
+│   │   ├── seed.js           # 200K bulk insertion script
+│   │   └── addNewProducts.js 
+│   └── server.js             # Express application entry point
+│
+└── frontend/
+    ├── src/
+    │   ├── App.jsx           # Main React component & API logic
+    │   ├── App.css           # Responsive grid and styling
+    │   └── main.jsx          # React DOM mounting
+    ├── index.html
+    └── package.json
+
 ```
 
 ---
@@ -108,81 +157,29 @@ http://localhost:5000
 ### Health Check
 
 Verify that the API is running.
-
-**Endpoint**
-
-```http
-GET /
-```
-
-**Response**
+**Endpoint:** `GET /`
+**Response:**
 
 ```json
-{
-  "message": "CodeVector Backend API is running"
-}
+{ "message": "CodeVector Backend API is running" }
+
 ```
 
----
-
-## Get Products
+### Get Products
 
 Fetch products with support for filtering and cursor-based pagination.
+**Endpoint:** `GET /api/products`
 
-**Endpoint**
+**Query Parameters:**
 
-```http
-GET /api/products
-```
+| Parameter | Type | Default | Description |
+| --- | --- | --- | --- |
+| `limit` | Number | 20 | Number of products per page (Maximum: 100) |
+| `category` | String | - | Filter products by category |
+| `cursorCreatedAt` | String | - | Cursor timestamp from previous response |
+| `cursorId` | Number | - | Cursor product ID from previous response |
 
-### Query Parameters
-
-| Parameter       | Type   | Default | Description                                |
-| --------------- | ------ | ------- | ------------------------------------------ |
-| limit           | Number | 20      | Number of products per page (Maximum: 100) |
-| category        | String | -       | Filter products by category                |
-| cursorCreatedAt | String | -       | Cursor timestamp from previous response    |
-| cursorId        | Number | -       | Cursor product ID from previous response   |
-
----
-
-### Available Categories
-
-```text
-Electronics
-Books
-Fashion
-Sports
-Home
-Beauty
-Toys
-```
-
----
-
-### Example Requests
-
-Get first page:
-
-```http
-GET /api/products?limit=5
-```
-
-Filter by category:
-
-```http
-GET /api/products?category=Books&limit=5
-```
-
-Fetch next page using cursor:
-
-```http
-GET /api/products?limit=5&cursorCreatedAt=2026-06-24T12:02:16.195Z&cursorId=112993
-```
-
----
-
-### Success Response
+**Success Response:**
 
 ```json
 {
@@ -202,120 +199,45 @@ GET /api/products?limit=5&cursorCreatedAt=2026-06-24T12:02:16.195Z&cursorId=1129
   },
   "hasMore": true
 }
+
 ```
 
-> To fetch the next page, pass `nextCursor.created_at` and `nextCursor.id` as query parameters.
+> **Pagination UI Logic:** The frontend passes `nextCursor.created_at` and `nextCursor.id` to the backend when the "Load More" button is clicked.
 
 ---
 
-## 🏗️ Project Structure
+## 🚀 Backend Performance Optimizations
 
-```text
-codevector-backend/
-│
-├── database/
-│   ├── db.js
-│   └── products.db
-│
-├── routes/
-│   └── products.js
-│
-├── scripts/
-│   ├── seed.js
-│   └── addNewProducts.js
-│
-├── server.js
-├── package.json
-├── package-lock.json
-└── README.md
-```
-
----
-
-## 🚀 Performance Optimizations
-
-This project was built with performance and scalability in mind.
+This project was built with a strong focus on backend performance and database efficiency:
 
 ### 1. Cursor-Based Pagination
 
-Traditional `OFFSET/LIMIT` pagination becomes slower as data grows and can return duplicate or missing records when data changes.
-
-This project uses **cursor-based pagination** using:
+Traditional `OFFSET/LIMIT` pagination becomes exponentially slower as data grows and can return duplicate or missing records when data changes. This project queries via:
 
 ```sql
 ORDER BY created_at DESC, id DESC
+
 ```
 
-Benefits:
-
-* Faster queries on large datasets.
-* No duplicate products while browsing.
-* No missing products when new products are inserted.
-
----
+**Benefits:** Constant O(1) query times, no duplicate products while browsing, and no missing products when new records are inserted.
 
 ### 2. Composite Indexing
 
-The following indexes are created:
+The following indexes ensure the database never performs a full-table scan:
 
 ```sql
-CREATE INDEX idx_products_created_id
-ON products(created_at DESC, id DESC);
+CREATE INDEX idx_products_created_id ON products(created_at DESC, id DESC);
+CREATE INDEX idx_products_category_created_id ON products(category, created_at DESC, id DESC);
 
-CREATE INDEX idx_products_category_created_id
-ON products(category, created_at DESC, id DESC);
 ```
 
-These indexes optimize:
+### 3. Zero-Count Pagination
 
-* Sorting
-* Filtering
-* Cursor lookups
-
-and help avoid expensive full-table scans.
-
----
-
-### 3. Efficient Pagination
-
-Instead of using expensive:
-
-```sql
-SELECT COUNT(*)
-```
-
-queries, the API fetches:
-
-```text
-limit + 1 rows
-```
-
-to determine whether additional pages exist.
-
----
+Instead of using expensive `SELECT COUNT(*)` queries to check if a "Load More" button should be rendered, the API fetches `limit + 1` rows to safely determine the `hasMore` boolean.
 
 ### 4. Database Optimizations
 
-SQLite is configured with:
-
-```js
-journal_mode = WAL
-synchronous = NORMAL
-```
-
-to improve read/write performance.
-
----
-
-### 5. High-Speed Bulk Inserts
-
-The seed script:
-
-* Uses prepared statements.
-* Uses transactions.
-* Inserts records in batches of 5000.
-
-This significantly reduces disk I/O overhead.
+SQLite is configured with `journal_mode = WAL` to drastically improve concurrent read/write performance.
 
 ---
 
@@ -325,9 +247,9 @@ AI tools such as ChatGPT and Gemini were used to:
 
 * Discuss pagination strategies.
 * Review implementation approaches.
-* Assist in generating boilerplate code.
+* Assist in generating boilerplate CSS and boilerplate code.
 
-All generated code was manually reviewed, tested, modified, and validated to ensure correctness and performance.
+All generated code was manually reviewed, tested, modified, and validated to ensure correctness and performance constraints were met.
 
 ---
 
@@ -335,13 +257,9 @@ All generated code was manually reviewed, tested, modified, and validated to ens
 
 Given more time, the following enhancements could be added:
 
-* Automated testing using Jest.
-* API documentation using Swagger/OpenAPI.
-* Redis caching for frequently accessed queries.
-* Docker containerization.
-* Frontend interface for browsing products.
-* Rate limiting and request throttling.
-* CI/CD pipeline integration.
+* **Frontend:** React Router for distinct product pages, Dark Mode UI, and Debounced Search.
+* **Backend:** Automated testing using Jest/Supertest and API documentation using Swagger/OpenAPI.
+* **Infrastructure:** Redis caching for frequently accessed categories and Docker containerization.
 
 ---
 
